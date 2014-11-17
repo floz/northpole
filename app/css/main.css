@@ -125,3 +125,15 @@ body {
   color: #000;
   background: #fff;
 }
+html,
+body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+#scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}

@@ -1,4 +1,10 @@
+Loader = require "loader/Loader"
 Experiment = require "experiment/Experiment"
 
-experiment = new Experiment()
-experiment.start()
+start = ->
+    experiment = new Experiment()
+    experiment.start()
+
+loader = new Loader
+loader.on "complete", start
+loader.load()
