@@ -15,12 +15,13 @@ class Scene
         @scene = new THREE.Scene
 
         @camera = new THREE.PerspectiveCamera 50, @_w / @_h, 1, 5000
-        @camera.position.y = 15
+        @camera.position.y = 12
 
         @_cameraControls = new CameraControls @camera
 
         @renderer = new THREE.WebGLRenderer
         @renderer.setSize @_w, @_h
+        @renderer.setClearColor 0x1b8fbb
 
         @dom.appendChild @renderer.domElement
 
@@ -43,18 +44,8 @@ class Scene
         @_composer.addPass @_passFXAA
 
     _initLights: ->
-        @_lightAmbient = new THREE.AmbientLight 0x404040
-        @_lightAmbient.intensity = .75
+        @_lightAmbient = new THREE.AmbientLight 0xffffff
         @scene.add @_lightAmbient
-
-        @_lightRight = new THREE.PointLight 0xeeeeee
-        @_lightRight.position.z = 100
-        @scene.add @_lightRight
-
-        @_lightSpot = new THREE.SpotLight 0xffffff
-        @_lightSpot.intensity = .5
-        @_lightSpot.position.set 100, 100, 10
-        @scene.add @_lightSpot
 
     _createScene: ->
         @_floor = new Floor
@@ -66,8 +57,8 @@ class Scene
 
     update: ->
         @_cameraControls.update()
-        # @renderer.render @scene, @camera
-        @_composer.render()
+        @renderer.render @scene, @camera
+        # @_composer.render()
 
     resize: ( @_w, @_h ) ->
         @renderer.setSize @_w, @_h

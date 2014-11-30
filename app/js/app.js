@@ -33,6 +33,11 @@ Experiment = (function() {
     this._updateDimensions();
     this._domScene = document.getElementById("scene");
     this._scene = new Scene(this._domScene, this._w, this._hXP);
+    this._stats = new Stats();
+    this._stats.domElement.style.position = "absolute";
+    this._stats.domElement.style.left = "0px";
+    this._stats.domElement.style.top = "0px";
+    document.body.appendChild(this._stats.domElement);
     this._resize();
     window.addEventListener("resize", this._resize, false);
   }
@@ -60,7 +65,9 @@ Experiment = (function() {
   };
 
   Experiment.prototype._update = function() {
+    this._stats.begin();
     this._scene.update();
+    this._stats.end();
     return requestAnimationFrame(this._update);
   };
 
@@ -300,10 +307,11 @@ Scene = (function() {
   Scene.prototype._initEngine = function() {
     this.scene = new THREE.Scene;
     this.camera = new THREE.PerspectiveCamera(50, this._w / this._h, 1, 5000);
-    this.camera.position.y = 15;
+    this.camera.position.y = 12;
     this._cameraControls = new CameraControls(this.camera);
     this.renderer = new THREE.WebGLRenderer;
     this.renderer.setSize(this._w, this._h);
+    this.renderer.setClearColor(0x1b8fbb);
     return this.dom.appendChild(this.renderer.domElement);
   };
 
@@ -326,16 +334,8 @@ Scene = (function() {
   };
 
   Scene.prototype._initLights = function() {
-    this._lightAmbient = new THREE.AmbientLight(0x404040);
-    this._lightAmbient.intensity = .75;
-    this.scene.add(this._lightAmbient);
-    this._lightRight = new THREE.PointLight(0xeeeeee);
-    this._lightRight.position.z = 100;
-    this.scene.add(this._lightRight);
-    this._lightSpot = new THREE.SpotLight(0xffffff);
-    this._lightSpot.intensity = .5;
-    this._lightSpot.position.set(100, 100, 10);
-    return this.scene.add(this._lightSpot);
+    this._lightAmbient = new THREE.AmbientLight(0xffffff);
+    return this.scene.add(this._lightAmbient);
   };
 
   Scene.prototype._createScene = function() {
@@ -348,7 +348,7 @@ Scene = (function() {
 
   Scene.prototype.update = function() {
     this._cameraControls.update();
-    return this._composer.render();
+    return this.renderer.render(this.scene, this.camera);
   };
 
   Scene.prototype.resize = function(_w, _h) {
@@ -381,10 +381,10 @@ Floor = (function(_super) {
   function Floor() {
     var geom, material, mesh;
     Floor.__super__.constructor.apply(this, arguments);
-    material = new THREE.MeshLambertMaterial({
-      color: 0xff0000
+    material = new THREE.MeshBasicMaterial({
+      color: 0x7daa4d
     });
-    geom = new THREE.PlaneBufferGeometry(50, 50);
+    geom = new THREE.PlaneBufferGeometry(1000, 400);
     mesh = new THREE.Mesh(geom, material);
     this.add(mesh);
     mesh.rotation.x = -Math.PI * .5;
@@ -409,19 +409,19 @@ Village = (function(_super) {
   __extends(Village, _super);
 
   function Village() {
-    var material, obj;
+    var data, mat, material, obj, _i, _len, _ref;
     Village.__super__.constructor.apply(this, arguments);
     material = new THREE.MeshLambertMaterial({
       color: 0x404040
     });
-    obj = objs.get("village");
+    data = objs.get("village");
+    _ref = data.materials;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      mat = _ref[_i];
+      mat.side = THREE.DoubleSide;
+    }
+    obj = new THREE.Mesh(data.geom, new THREE.MeshFaceMaterial(data.materials));
     obj.scale.set(.05, .05, .05);
-    obj.traverse(function(child) {
-      if (child instanceof THREE.Mesh) {
-        child.material = material;
-        return child.material.side = THREE.DoubleSide;
-      }
-    });
     this.add(obj);
   }
 
@@ -473,24 +473,31 @@ module.exports = Loader;
 
 },{"loader/Loader3D":9}],9:[function(require,module,exports){
 var Loader, Loader3D, objs,
-  __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
   __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 objs = require("models/objs");
 
-Loader = (function() {
+Loader = (function(_super) {
+  __extends(Loader, _super);
+
   function Loader(id, manager) {
     var loader;
-    loader = new THREE.OBJLoader(manager);
-    loader.load("obj/" + id + ".obj", function(obj) {
-      return objs.register(id, obj);
-    });
+    Loader.__super__.constructor.apply(this, arguments);
+    loader = new THREE.JSONLoader(true);
+    loader.load("obj/" + id + ".js", (function(_this) {
+      return function(obj, materials) {
+        objs.register(id, obj, materials);
+        console.log(id, obj, materials);
+        return _this.emit("complete");
+      };
+    })(this));
   }
 
   return Loader;
 
-})();
+})(Emitter);
 
 Loader3D = (function(_super) {
   __extends(Loader3D, _super);
@@ -505,16 +512,18 @@ Loader3D = (function(_super) {
   }
 
   Loader3D.prototype.load = function() {
-    var id, _i, _len, _ref;
+    var id, loader, _i, _len, _ref;
     _ref = this._ids;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       id = _ref[_i];
-      new Loader(id, this._manager);
+      loader = new Loader(id, this._manager);
+      loader.on("complete", this._onLoadingProgress);
     }
   };
 
   Loader3D.prototype._onLoadingProgress = function(item, loaded, total) {
-    if (loaded === total) {
+    this._idxLoaded++;
+    if (this._idxLoaded === this._ids.length) {
       return this.emit("complete");
     }
   };
@@ -535,8 +544,11 @@ Objs = (function() {
     this._objsById = {};
   }
 
-  Objs.prototype.register = function(id, obj) {
-    return this._objsById[id] = obj;
+  Objs.prototype.register = function(id, geom, materials) {
+    return this._objsById[id] = {
+      geom: geom,
+      materials: materials
+    };
   };
 
   Objs.prototype.get = function(id) {

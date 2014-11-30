@@ -10,6 +10,13 @@ class Experiment
         @_domScene = document.getElementById "scene"
         @_scene = new Scene @_domScene, @_w, @_hXP
 
+        @_stats = new Stats()
+        # @_stats.setMode 1
+        @_stats.domElement.style.position = "absolute"
+        @_stats.domElement.style.left = "0px"
+        @_stats.domElement.style.top = "0px"
+        document.body.appendChild( @_stats.domElement )
+
         @_resize()
 
         window.addEventListener "resize", @_resize, false
@@ -33,7 +40,9 @@ class Experiment
         @_update()
 
     _update: =>
+        @_stats.begin()
         @_scene.update()
+        @_stats.end()
         
         requestAnimationFrame @_update
         
