@@ -13,6 +13,7 @@ var rename = require( "gulp-rename" );
 var concat = require( "gulp-concat" );
 
 var browserify = require( "gulp-browserify" );
+var browserifyShader = require( "browserify-shader" );
 var source = require( "vinyl-source-stream" );
 var html = require( "html-browserify" );
 var coffeeify = require( "coffeeify" );
@@ -27,7 +28,7 @@ var src = {
 
 gulp.task( "browser-sync", function() {
 
-  browserSync.init( [ "app/js/*.js", "app/css/*.css", "app/*.html" ], {
+  browserSync.init( [ "app/js/*.js", "app/css/*.css", "app/*.html", "app/obj/*.obj", "app/obj/*.png", "app/obj/*.mtl" ], {
     server: {
       baseDir: "./app"
     }
@@ -92,4 +93,4 @@ gulp.task( "watch", function() {
 
 
 gulp.task( "default", [ "bower-install", "browser-sync", "styles", "templates", "scripts", "watch" ] );
-// gulp.task( "default", [ "scripts" ] );
+gulp.task( "tscripts", [ "scripts" ] );

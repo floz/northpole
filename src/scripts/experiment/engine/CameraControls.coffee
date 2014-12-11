@@ -23,6 +23,8 @@ class CameraControls
         @_lx = e.x
 
         @_toA -= dx * .005
+        @_toA = -.86 if @_toA < -.86
+        @_toA = 1.005 if @_toA > 1.005
 
     _onUp: ( e ) =>
         interactions.off window, "move", @_onMove

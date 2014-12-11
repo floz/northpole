@@ -1,6 +1,7 @@
 CameraControls = require "experiment/engine/CameraControls"
 Village = require "experiment/village/Village"
-Floor = require "experiment/landscape/Floor"
+Rubans = require "experiment/village/Rubans"
+Grass = require "experiment/landscape/Grass"
 
 class Scene
 
@@ -48,8 +49,13 @@ class Scene
         @scene.add @_lightAmbient
 
     _createScene: ->
-        @_floor = new Floor
-        @scene.add @_floor
+        @_grass = new Grass
+        @_grass.position.x = 7
+        @scene.add @_grass
+
+        @_rubans = new Rubans
+        @_rubans.position.x = 7
+        @scene.add @_rubans
 
         @_village = new Village
         @_village.position.x = 7
@@ -57,6 +63,9 @@ class Scene
 
     update: ->
         @_cameraControls.update()
+        @_grass.update()
+        @_rubans.update()
+        @_village.update()
         @renderer.render @scene, @camera
         # @_composer.render()
 

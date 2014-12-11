@@ -8,20 +8,70 @@
 #  
 #  ==========================================================================
 
-newmtl basewall
+newmtl pierre
 Kd 1.000000 1.000000 1.000000
 illum 1
-map_Kd basewallSurface_Color.png
+map_Kd pierreSurface_Color.png
 
-newmtl glass3
+newmtl background
 Kd 1.000000 1.000000 1.000000
 illum 1
-map_Kd glass3Surface_Color.png
+map_Kd backgroundSurface_Color.png
 
-newmtl domesouth
+newmtl gift2
 Kd 1.000000 1.000000 1.000000
 illum 1
-map_Kd domesouthSurface_Color.png
+map_Kd gift2Surface_Color.png
+
+newmtl grass2
+Kd 1.000000 1.000000 1.000000
+illum 1
+map_Kd grass2Surface_Color.png
+
+newmtl grass
+Kd 1.000000 1.000000 1.000000
+illum 1
+map_Kd grassSurface_Color.png
+
+newmtl machine
+Kd 1.000000 1.000000 1.000000
+illum 1
+map_Kd machineSurface_Color.png
+
+newmtl tonneau4
+Kd 1.000000 1.000000 1.000000
+illum 1
+map_Kd tonneau4Surface_Color.png
+
+newmtl tonneau3
+Kd 1.000000 1.000000 1.000000
+illum 1
+map_Kd tonneau3Surface_Color.png
+
+newmtl tonneau2
+Kd 1.000000 1.000000 1.000000
+illum 1
+map_Kd tonneau2Surface_Color.png
+
+newmtl tonneau1
+Kd 1.000000 1.000000 1.000000
+illum 1
+map_Kd tonneau1Surface_Color.png
+
+newmtl tonneau0
+Kd 1.000000 1.000000 1.000000
+illum 1
+map_Kd tonneau0Surface_Color.png
+
+newmtl towerwest
+Kd 1.000000 1.000000 1.000000
+illum 1
+map_Kd towerwestSurface_Color.png
+
+newmtl gift1
+Kd 1.000000 1.000000 1.000000
+illum 1
+map_Kd gift1Surface_Color.png
 
 newmtl sucre1
 Kd 1.000000 1.000000 1.000000
@@ -32,36 +82,6 @@ newmtl sucre2
 Kd 1.000000 1.000000 1.000000
 illum 1
 map_Kd sucre2Surface_Color.png
-
-newmtl towerwest
-Kd 1.000000 1.000000 1.000000
-illum 1
-map_Kd towerwestSurface_Color.png
-
-newmtl sidedoor
-Kd 1.000000 1.000000 1.000000
-illum 1
-map_Kd sidedoorSurface_Color.png
-
-newmtl ruban2
-Kd 1.000000 1.000000 1.000000
-illum 1
-map_Kd ruban2Surface_Color.png
-
-newmtl gift2
-Kd 1.000000 1.000000 1.000000
-illum 1
-map_Kd gift2Surface_Color.png
-
-newmtl ruban1
-Kd 1.000000 1.000000 1.000000
-illum 1
-map_Kd ruban1Surface_Color.png
-
-newmtl gift1
-Kd 1.000000 1.000000 1.000000
-illum 1
-map_Kd gift1Surface_Color.png
 
 newmtl housebird
 Kd 1.000000 1.000000 1.000000
@@ -88,15 +108,20 @@ Kd 1.000000 1.000000 1.000000
 illum 1
 map_Kd glass2Surface_Color.png
 
+newmtl glass3
+Kd 1.000000 1.000000 1.000000
+illum 1
+map_Kd glass3Surface_Color.png
+
 newmtl domenorth
 Kd 1.000000 1.000000 1.000000
 illum 1
 map_Kd domenorthSurface_Color.png
 
-newmtl ruban3
+newmtl domesouth
 Kd 1.000000 1.000000 1.000000
 illum 1
-map_Kd ruban3Surface_Color.png
+map_Kd domesouthSurface_Color.png
 
 newmtl smoke2
 Kd 1.000000 1.000000 1.000000
@@ -118,15 +143,20 @@ Kd 1.000000 1.000000 1.000000
 illum 1
 map_Kd portenainSurface_Color.png
 
-newmtl road
+newmtl basewall
 Kd 1.000000 1.000000 1.000000
 illum 1
-map_Kd roadSurface_Color.png
+map_Kd basewallSurface_Color.png
 
 newmtl smoke3
 Kd 1.000000 1.000000 1.000000
 illum 1
 map_Kd smoke3Surface_Color.png
+
+newmtl sidedoor
+Kd 1.000000 1.000000 1.000000
+illum 1
+map_Kd sidedoorSurface_Color.png
 
 newmtl fences
 Kd 1.000000 1.000000 1.000000
